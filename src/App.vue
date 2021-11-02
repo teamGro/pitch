@@ -4,11 +4,16 @@
 
 <script>
 import { defineComponent } from 'vue';
+import { useStore } from 'vuex';
 import MainPage from './views/MainPage.vue';
 
 export default defineComponent({
   components: { MainPage },
-  setup() {},
+  setup() {
+    const store = useStore();
+
+    store.dispatch('getAllBreeds');
+  },
 });
 </script>
 
