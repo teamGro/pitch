@@ -40,6 +40,8 @@ body {
 
   background-color: transparent;
   font: inherit;
+
+  cursor: pointer;
 }
 
 .arrow {
@@ -54,4 +56,5 @@ body {
 
 ul {
   list-style: none;
+  padding: 0;
 }

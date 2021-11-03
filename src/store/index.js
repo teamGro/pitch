@@ -4,13 +4,12 @@ import { createStore } from 'vuex';
 export default createStore({
   state: {
     breeds: {},
+    filterBreeds: [],
   },
   getters: {
     getBreedsTitle(state) {
       const result = {};
       const keys = Object.keys(state.breeds);
-      // const values = Object.values(state.breeds);
-
       let currentLetter = 'a';
 
       keys.forEach((item) => {
@@ -34,6 +33,16 @@ export default createStore({
   mutations: {
     setBreeds(state, breeds) {
       state.breeds = breeds;
+    },
+    addBreedToFilter(state, breed) {
+      if (!state.filterBreeds.find(((item) => item === breed))) {
+        state.filterBreeds.push(breed);
+      }
+    },
+    deleteBreedFromFilter(state, itemNumber) {
+      state.filterBreeds = state.filterBreeds.filter((item) => (
+        item !== state.filterBreeds[itemNumber]
+      ));
     },
   },
   actions: {

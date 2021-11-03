@@ -1,0 +1,47 @@
+<template>
+  <div
+    class="breeds"
+    v-if="isOpen"
+  >
+    <ul class="breeds__selected-list">
+      <li class="breeds__item">Все пёсели</li>
+    </ul>
+    <ul class="breeds__list">
+      <li
+        class="breeds__item-container"
+        v-for="breed, i in breeds"
+        :key="i"
+      >
+        <span class="breeds__letter">{{ i }}</span>
+        <span
+          class="breeds__item"
+          v-for="item in breed"
+          :key="item"
+          @click="addToFilterList"
+        >{{ item }}</span>
+      </li>
+    </ul>
+
+  </div>
+</template>
+
+<script>
+import { defineComponent, computed } from 'vue';
+import { useStore } from 'vuex';
+
+export default defineComponent({
+  props: ['isOpen'],
+  setup() {
+    const store = useStore();
+
+    const addToFilterList = (e) => {
+      store.commit('addBreedToFilter', e.target.textContent);
+    };
+
+    return {
+      breeds: computed(() => store.getters.getBreedsTitle),
+      addToFilterList,
+    };
+  },
+});
+</script>
