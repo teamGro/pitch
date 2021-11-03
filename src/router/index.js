@@ -1,7 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import MainPage from '@/views/MainPage.vue';
+import NotFoundPage from '@/views/NotFoundPage.vue';
 
 const routes = [
-  { },
+  {
+    path: '/',
+    name: 'Main',
+    component: MainPage,
+  },
+  {
+    name: 'notFound',
+    path: '/:notFound(.*)',
+    component: NotFoundPage,
+  },
 
 ];
 
