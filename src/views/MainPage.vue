@@ -1,5 +1,8 @@
 <template>
-  <main class="container main">
+  <main
+    class="container main"
+    @scroll="getPhotos"
+  >
     <div class="main__controls controls">
       <div class="controls__wrapper">
         <div class="controls__breeds-selected-wrapper">
@@ -36,6 +39,12 @@
 
     <breeds-list :isOpen="isBreedsFilter"></breeds-list>
 
+    <div class="photos">
+      <photos-list></photos-list>
+    </div>
+
+    <preloader v-if="isDownloading"></preloader>
+
   </main>
 </template>
 
@@ -43,13 +52,17 @@
 import { defineComponent, ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import BreedsList from '@/components/BreedsList.vue';
+import PhotosList from '@/components/PhotosList.vue';
+import Preloader from '@/components/Preloader.vue';
 
 export default defineComponent({
-  components: { BreedsList },
+  components: { BreedsList, PhotosList, Preloader },
   setup() {
     const store = useStore();
     const isSorting = ref(false);
     const isBreedsFilter = ref(false);
+
+    const isDownloading = ref(false);
 
     const toggleBreedsFilter = () => {
       isBreedsFilter.value = !isBreedsFilter.value;
@@ -61,15 +74,32 @@ export default defineComponent({
       isSorting.value = !isSorting.value;
     };
 
+    const winHeight = document.body.clientHeight;
+
+    const getPhotos = () => {
+      if (winHeight + window.pageYOffset >= document.body.offsetHeight) {
+        isDownloading.value = true;
+        window.removeEventListener('scroll', getPhotos);
+        store.dispatch('getPhotos', 12).then(() => {
+          window.addEventListener('scroll', getPhotos);
+          isDownloading.value = false;
+        });
+      }
+    };
+
+    window.addEventListener('scroll', getPhotos);
+
     return {
       isSorting,
       isBreedsFilter,
       breeds: computed(() => store.getters.getBreedsTitle),
       filtersList: computed(() => store.state.filterBreeds),
+      isDownloading,
 
       deleteFiltersBreed,
       toggleBreedsFilter,
       toggleSorting,
+      getPhotos,
     };
   },
 });

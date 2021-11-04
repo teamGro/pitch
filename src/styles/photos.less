@@ -1,0 +1,72 @@
+.photos {
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__item {
+    position: relative;
+
+    width: 365px;
+    height: 290px;
+    margin-bottom: 30px;
+    
+    background: linear-gradient(3.21deg, #000000 -15.62%, rgba(0, 0, 0, 0) 45.69%);
+    
+    &:not(:nth-child(3n + 4)) {
+      margin-right: 30px; 
+    }
+    
+    &_main {
+      width: 100%;
+      margin-right: 0 !important;
+      height: 513px;
+    }
+  }
+  
+  &__img {
+    width: 100%;
+    border-radius: 8px;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__like-btn {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+
+    width: 29px;
+    height: 26px;
+
+    // background-image: url('../img/like-icon-big.png');
+
+    &__main {
+      top: 25px;
+      left: 25px;
+    }
+  }
+
+  &__title {
+    position: absolute;
+    right: 25px;
+    bottom: 25px;
+
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 28px;
+    text-align: right;
+    color: #FFFFFF;
+    text-transform: capitalize;
+
+    &_main {
+      right: 50px;
+      bottom: 50px;
+      
+      font-size: 30px;
+      line-height: 28px;
+    }
+
+
+  }
+}

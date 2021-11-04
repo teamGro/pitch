@@ -1,0 +1,42 @@
+.preloader {
+  margin-top: 55px;
+  margin-bottom: 55px;
+  display: flex;
+  justify-content: center;
+
+  &__element {
+    width: 12px;
+    height: 12px;
+    border: 1px solid #FFFFFF;
+    border-radius: 50%;
+    animation: scale 1s infinite linear;
+
+    &:not(:last-child) {
+      margin-right: 15px;
+    }
+
+    &_left {
+      animation-delay: .2s;
+    }
+
+    &_middle {
+      animation-delay: .4s;
+    }
+
+    &_right {
+      animation-delay: .6s;
+    }
+  }
+}
+
+@keyframes scale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }  
+}

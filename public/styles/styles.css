@@ -24,6 +24,7 @@ body {
   font-size: 14px;
   line-height: 20px;
   font-weight: 400;
+  letter-spacing: 0.01em;
 
   background: linear-gradient(180deg, #1B1A1F 0%, #111013 99.09%);
 }

@@ -7,7 +7,7 @@ export default createStore({
   state: {
     breeds: {},
     filterBreeds: [],
-    photos: null,
+    photos: [],
   },
   getters: {
     getBreedsTitle(state) {
@@ -32,6 +32,12 @@ export default createStore({
 
       return result;
     },
+    getMainPhoto(state) {
+      return state.photos[0] || {};
+    },
+    getPhotos(state) {
+      return state.photos.slice(1);
+    },
   },
   mutations: {
     setBreeds(state, breeds) {
@@ -48,8 +54,8 @@ export default createStore({
       ));
     },
     setPhotosBreeds(state, photos) {
-      if (state.photos) {
-        state.photos.concat(photos);
+      if (state.photos.length) {
+        state.photos = state.photos.concat(photos);
       } else {
         state.photos = photos;
       }
@@ -65,7 +71,6 @@ export default createStore({
       for (let i = 0; i < repeatQuantity; i += 1) {
         /* eslint-disable no-await-in-loop */
         const response = await axios.get('https://dog.ceo/api/breeds/image/random');
-        console.log(response);
         const breedLastPart = response.data.message.lastIndexOf('/');
         photos.push(
           {
@@ -74,8 +79,6 @@ export default createStore({
           },
         );
       }
-
-      console.log(photos);
 
       commit('setPhotosBreeds', photos);
     },
