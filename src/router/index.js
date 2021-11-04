@@ -4,7 +4,7 @@ import NotFoundPage from '@/views/NotFoundPage.vue';
 
 const routes = [
   {
-    path: '/',
+    path: '/:breed?',
     name: 'Main',
     component: MainPage,
   },

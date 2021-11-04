@@ -1,7 +1,14 @@
 import axios from 'axios';
 import { createStore } from 'vuex';
 
-const breedFirstPart = 'https://images.dog.ceo/breeds/'.lastIndexOf('/') + 1;
+const breedNameInURL = 4;
+
+function normalizeBreedPhotos(response) {
+  return response.data.message.map((item) => ({
+    photo: item,
+    breed: item.split('/')[breedNameInURL],
+  }));
+}
 
 export default createStore({
   state: {
@@ -48,6 +55,12 @@ export default createStore({
         state.filterBreeds.push(breed);
       }
     },
+    clearFilters(state) {
+      if (state.filterBreeds.length) {
+        state.filterBreeds = [];
+        state.photos = [];
+      }
+    },
     deleteBreedFromFilter(state, itemNumber) {
       state.filterBreeds = state.filterBreeds.filter((item) => (
         item !== state.filterBreeds[itemNumber]
@@ -60,6 +73,16 @@ export default createStore({
         state.photos = photos;
       }
     },
+    updatePhotosBreeds(state, { photos, isUpdate }) {
+      if (isUpdate) {
+        state.photos = state.photos.concat(photos);
+      } else {
+        state.photos = photos;
+      }
+    },
+    clearPhotosBreeds(state) {
+      state.photos = [];
+    },
   },
   actions: {
     async getAllBreeds({ commit }) {
@@ -67,20 +90,16 @@ export default createStore({
       commit('setBreeds', response.data.message);
     },
     async getPhotos({ commit }, repeatQuantity) {
-      const photos = [];
-      for (let i = 0; i < repeatQuantity; i += 1) {
-        /* eslint-disable no-await-in-loop */
-        const response = await axios.get('https://dog.ceo/api/breeds/image/random');
-        const breedLastPart = response.data.message.lastIndexOf('/');
-        photos.push(
-          {
-            photo: response.data.message,
-            breed: response.data.message.slice(breedFirstPart, breedLastPart),
-          },
-        );
-      }
+      const response = await axios.get(`https://dog.ceo/api/breeds/image/random/${repeatQuantity}`);
+      const photos = normalizeBreedPhotos(response);
 
       commit('setPhotosBreeds', photos);
+    },
+    async getBreed({ commit }, { breed, quantity, isUpdate }) {
+      const response = await axios.get(`https://dog.ceo/api/breed/${breed}/images/random/${quantity}`);
+      const photos = normalizeBreedPhotos(response);
+
+      commit('updatePhotosBreeds', { photos, isUpdate });
     },
   },
 });
