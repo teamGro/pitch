@@ -27,14 +27,14 @@
             >X</button>
           </p>
         </div>
-        <button
+        <!-- <button
           class="btn controls__sorting"
           :class="{'controls__sorting_active': isSorting}"
           @click="toggleSorting"
         >
           <span class="controls__sorting-title">Сортировка по алфавиту</span>
           <span class="controls__sorting-switch"></span>
-        </button>
+        </button> -->
       </div>
     </div>
 
@@ -46,14 +46,7 @@
 
     <preloader v-if="isDownloading"></preloader>
 
-    <!-- <button
-      v-if="isToTopArrow"
-      class="arrowTop"
-      @click="goToTop"
-    >UP</button> -->
-
     <up-btn :isVisible="isToTopBtnVisible"></up-btn>
-
   </main>
 </template>
 
@@ -79,10 +72,10 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const route = useRoute();
+
     const isSorting = ref(false);
     const isBreedsFilter = ref(false);
     const isToTopBtnVisible = ref(false);
-
     const isDownloading = ref(false);
 
     const toggleBreedsFilter = () => {
@@ -105,6 +98,10 @@ export default defineComponent({
     const toggleSorting = () => {
       isSorting.value = !isSorting.value;
     };
+
+    if (store.state.filterBreeds.length && !route.query.breed) {
+      router.replace({ name: 'Main', query: { breed: store.state.filterBreeds.join('&') } });
+    }
 
     const winHeight = document.body.clientHeight;
     const filtersList = computed(() => store.state.filterBreeds);

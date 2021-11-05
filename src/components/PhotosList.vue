@@ -8,7 +8,6 @@
     >
       <photo-item :photo="item"></photo-item>
     </li>
-    <!--  -->
   </ul>
 </template>
 

@@ -5,7 +5,7 @@ import FavouritesPage from '../views/FavouritesPage.vue';
 
 const routes = [
   {
-    path: '/:breed?',
+    path: '/',
     name: 'Main',
     component: MainPage,
   },

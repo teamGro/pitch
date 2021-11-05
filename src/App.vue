@@ -6,10 +6,8 @@
 import { defineComponent, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
-// import MainPage from './views/MainPage.vue';
 
 export default defineComponent({
-  // components: { MainPage },
   setup() {
     const store = useStore();
     const route = useRoute();
@@ -19,21 +17,20 @@ export default defineComponent({
     watch(
       () => route.query,
       () => {
-        if (!route.query.breed) {
+        if (route.query.breed && route.query.breed !== store.state.filterBreeds.join('&')) {
+          const breeds = route.query.breed.split('&');
+          breeds.forEach((item, i) => {
+            if (i === 0) {
+              store.dispatch('getBreed', { breed: item, quantity: 13, isUpdate: false });
+            } else {
+              store.dispatch('getBreed', { breed: item, quantity: 12, isUpdate: true });
+            }
+            store.commit('addBreedToFilter', item);
+          });
+        } else if (!route.query.breed && !store.state.photos.length) {
           store.commit('clearPhotosBreeds');
           store.dispatch('getPhotos', 13);
-          return;
         }
-
-        const breeds = route.query.breed.split('&');
-        breeds.forEach((item, i) => {
-          if (i === 0) {
-            store.dispatch('getBreed', { breed: item, quantity: 13, isUpdate: false });
-          } else {
-            store.dispatch('getBreed', { breed: item, quantity: 12, isUpdate: true });
-          }
-          store.commit('addBreedToFilter', item);
-        });
       },
     );
 
