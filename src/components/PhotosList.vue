@@ -1,7 +1,14 @@
 <template>
   <ul class="photos__list">
     <main-photo :photo="mainPhoto"></main-photo>
-    <photo-item :photos="photos"></photo-item>
+    <li
+      class="photos__item photos__item_list"
+      v-for="item, i in photos"
+      :key="i"
+    >
+      <photo-item :photo="item"></photo-item>
+    </li>
+    <!--  -->
   </ul>
 </template>
 

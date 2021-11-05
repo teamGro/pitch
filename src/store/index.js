@@ -15,6 +15,7 @@ export default createStore({
     breeds: {},
     filterBreeds: [],
     photos: [],
+    favourites: null,
   },
   getters: {
     getBreedsTitle(state) {
@@ -82,6 +83,9 @@ export default createStore({
     },
     clearPhotosBreeds(state) {
       state.photos = [];
+    },
+    setFavourites(state, favourites) {
+      state.favourites = favourites;
     },
   },
   actions: {

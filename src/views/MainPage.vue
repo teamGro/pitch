@@ -1,4 +1,5 @@
 <template>
+  <base-header></base-header>
   <main
     class="container main"
     @scroll="getNewPhotos"
@@ -45,11 +46,13 @@
 
     <preloader v-if="isDownloading"></preloader>
 
-    <button
+    <!-- <button
       v-if="isToTopArrow"
       class="arrowTop"
       @click="goToTop"
-    >UP</button>
+    >UP</button> -->
+
+    <up-btn :isVisible="isToTopBtnVisible"></up-btn>
 
   </main>
 </template>
@@ -61,16 +64,24 @@ import { useRouter, useRoute } from 'vue-router';
 import BreedsList from '@/components/BreedsList.vue';
 import PhotosList from '@/components/PhotosList.vue';
 import Preloader from '@/components/Preloader.vue';
+import UpBtn from '@/components/UpBtn.vue';
+import BaseHeader from '@/components/BaseHeader.vue';
 
 export default defineComponent({
-  components: { BreedsList, PhotosList, Preloader },
+  components: {
+    BaseHeader,
+    BreedsList,
+    PhotosList,
+    Preloader,
+    UpBtn,
+  },
   setup() {
     const store = useStore();
     const router = useRouter();
     const route = useRoute();
     const isSorting = ref(false);
     const isBreedsFilter = ref(false);
-    const isToTopArrow = ref(false);
+    const isToTopBtnVisible = ref(false);
 
     const isDownloading = ref(false);
 
@@ -103,26 +114,23 @@ export default defineComponent({
       if (winHeight + window.pageYOffset >= document.body.offsetHeight) {
         isDownloading.value = true;
         window.removeEventListener('scroll', getNewPhotos);
-        store.dispatch('getNewPhotos', 12).then(() => {
+        store.dispatch('getPhotos', 12).then(() => {
           window.addEventListener('scroll', getNewPhotos);
           isDownloading.value = false;
         });
       }
     };
 
-    const renderToTopArrow = () => {
-      if (window.pageYOffset !== 0) {
-        isToTopArrow.value = true;
+    const toggleToTopBtn = () => {
+      if (window.pageYOffset > 220) {
+        isToTopBtnVisible.value = true;
+      } else {
+        isToTopBtnVisible.value = false;
       }
     };
 
-    const goToTop = () => {
-      window.scrollTo(0, 0);
-      isToTopArrow.value = false;
-    };
-
     window.addEventListener('scroll', getNewPhotos);
-    window.addEventListener('scroll', renderToTopArrow);
+    window.addEventListener('scroll', toggleToTopBtn);
 
     return {
       isSorting,
@@ -130,13 +138,13 @@ export default defineComponent({
       breeds: computed(() => store.getters.getBreedsTitle),
       filtersList,
       isDownloading,
-      isToTopArrow,
+      isToTopBtnVisible,
 
       deleteFiltersBreed,
       toggleBreedsFilter,
       toggleSorting,
       getNewPhotos,
-      goToTop,
+      toggleToTopBtn,
     };
   },
 });

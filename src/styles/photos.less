@@ -13,7 +13,7 @@
     
     background: linear-gradient(3.21deg, #000000 -15.62%, rgba(0, 0, 0, 0) 45.69%);
     
-    &:not(:nth-child(3n + 4)) {
+    &_list:not(:nth-child(3n + 4)) {
       margin-right: 30px; 
     }
     
@@ -21,6 +21,12 @@
       width: 100%;
       margin-right: 0 !important;
       height: 513px;
+    }
+
+    &_favourites {
+      &:not(:nth-child(3n)) {
+        margin-right: 30px;
+      }
     }
   }
   

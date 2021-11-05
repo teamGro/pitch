@@ -1,12 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import MainPage from '@/views/MainPage.vue';
 import NotFoundPage from '@/views/NotFoundPage.vue';
+import FavouritesPage from '../views/FavouritesPage.vue';
 
 const routes = [
   {
     path: '/:breed?',
     name: 'Main',
     component: MainPage,
+  },
+  {
+    path: '/favourites',
+    name: 'Favourites',
+    component: FavouritesPage,
   },
   {
     name: 'notFound',

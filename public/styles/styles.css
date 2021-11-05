@@ -29,6 +29,10 @@ body {
   background: linear-gradient(180deg, #1B1A1F 0%, #111013 99.09%);
 }
 
+a {
+  text-decoration: none;
+}
+
 .container {
   max-width: 1160px;
   min-width: 280px;
