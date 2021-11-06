@@ -59,6 +59,7 @@ import PhotosList from '@/components/PhotosList.vue';
 import Preloader from '@/components/Preloader.vue';
 import UpBtn from '@/components/UpBtn.vue';
 import BaseHeader from '@/components/BaseHeader.vue';
+import fixedNumbers from '@/helpers/constants';
 
 export default defineComponent({
   components: {
@@ -111,7 +112,7 @@ export default defineComponent({
       if (winHeight + window.pageYOffset >= document.body.offsetHeight) {
         isDownloading.value = true;
         window.removeEventListener('scroll', getNewPhotos);
-        store.dispatch('getPhotos', 12).then(() => {
+        store.dispatch('getPhotos', fixedNumbers.restPhotosQty).then(() => {
           window.addEventListener('scroll', getNewPhotos);
           isDownloading.value = false;
         });
@@ -146,15 +147,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="less">
-.arrowTop {
-  position: fixed;
-  bottom: 50px;
-  right: 50px;
-
-  width: 100px;
-  height: 50px;
-  background-color: #fff;
-}
-</style>

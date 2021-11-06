@@ -6,6 +6,7 @@
     <ul class="breeds__selected-list">
       <li
         class="breeds__item"
+        :class="{'breeds__item_selected': activeFilters.length === 0 }"
         @click="getAllDogs"
       >Все пёсели</li>
     </ul>
@@ -20,7 +21,7 @@
           class="breeds__item"
           v-for="item in breed"
           :key="item"
-          @click="addToFilterList"
+          @click="addToFilterList(item)"
         >{{ item }}</span>
       </li>
     </ul>
@@ -32,6 +33,7 @@
 import { defineComponent, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter, useRoute } from 'vue-router';
+import fixedNumbers from '@/helpers/constants';
 
 export default defineComponent({
   props: ['isOpen'],
@@ -40,8 +42,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
 
-    const addToFilterList = (e) => {
-      const breed = e.target.textContent;
+    const addToFilterList = (breed) => {
       if (route.query.breed && route.query.breed.indexOf(breed) === -1) {
         router.replace({ name: 'Main', query: { breed: `${route.query.breed}&${breed}` } });
       } else if (!route.query.breed) {
@@ -52,13 +53,14 @@ export default defineComponent({
     const getAllDogs = () => {
       router.replace({ name: 'Main', query: '' });
       store.commit('clearFilters');
-      store.dispatch('getPhotos', { repeatQuantity: 13 });
+      store.dispatch('getPhotos', { repeatQuantity: fixedNumbers.firstPhotosQty });
     };
 
     return {
       breeds: computed(() => store.getters.getBreedsTitle),
       addToFilterList,
       getAllDogs,
+      activeFilters: computed(() => store.state.filterBreeds),
     };
   },
 });

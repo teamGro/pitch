@@ -94,16 +94,24 @@ export default createStore({
       commit('setBreeds', response.data.message);
     },
     async getPhotos({ commit }, repeatQuantity) {
-      const response = await axios.get(`https://dog.ceo/api/breeds/image/random/${repeatQuantity}`);
-      const photos = normalizeBreedPhotos(response);
+      try {
+        const response = await axios.get(`https://dog.ceo/api/breeds/image/random/${repeatQuantity}`);
+        const photos = normalizeBreedPhotos(response);
 
-      commit('setPhotosBreeds', photos);
+        commit('setPhotosBreeds', photos);
+      } catch (err) {
+        console.error(err);
+      }
     },
     async getBreed({ commit }, { breed, quantity, isUpdate }) {
-      const response = await axios.get(`https://dog.ceo/api/breed/${breed}/images/random/${quantity}`);
-      const photos = normalizeBreedPhotos(response);
+      try {
+        const response = await axios.get(`https://dog.ceo/api/breed/${breed}/images/random/${quantity}`);
+        const photos = normalizeBreedPhotos(response);
 
-      commit('updatePhotosBreeds', { photos, isUpdate });
+        commit('updatePhotosBreeds', { photos, isUpdate });
+      } catch (err) {
+        console.error(err);
+      }
     },
   },
 });

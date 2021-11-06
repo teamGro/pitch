@@ -17,19 +17,17 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { useStore } from 'vuex';
 import likeIconDisactive from '../assets/like-icon-big.png';
 import likeIconActive from '../assets/like-icon-active.png';
+import useFilters from '@/hooks/useFilters';
 
 export default defineComponent({
   props: ['photo'],
   setup() {
+    const { toggleLike, isLike, likeIcon } = useFilters();
     const route = useRoute();
-    const store = useStore();
-    const isLike = ref(false);
-    const likeIcon = ref(likeIconDisactive);
 
     if (route.name === 'Favourites') {
       likeIcon.value = likeIconActive;
@@ -42,19 +40,6 @@ export default defineComponent({
         likeIcon.value = likeIconDisactive;
       }
     });
-
-    const toggleLike = (photo) => {
-      let favouritesPhotos = JSON.parse(localStorage.getItem('favourites')) || [];
-      if (favouritesPhotos && favouritesPhotos.find((item) => item.photo === photo.photo)) {
-        favouritesPhotos = favouritesPhotos.filter((item) => item.photo !== photo.photo);
-        store.commit('setFavourites', favouritesPhotos);
-        isLike.value = false;
-      } else {
-        favouritesPhotos.push(photo);
-        isLike.value = true;
-      }
-      localStorage.setItem('favourites', JSON.stringify(favouritesPhotos));
-    };
 
     return {
       likeIcon,

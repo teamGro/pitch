@@ -1,5 +1,8 @@
 <template>
-  <li class="photos__item photos__item_main">
+  <li
+    class="photos__item photos__item_main"
+    @click="addToFilter(photo.breed)"
+  >
     <img
       class="photos__img"
       :src="photo.photo"
@@ -17,17 +20,17 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch } from 'vue';
-import { useStore } from 'vuex';
+import { defineComponent, watch } from 'vue';
 import likeIconDisactive from '../assets/like-icon-big.png';
 import likeIconActive from '../assets/like-icon-active.png';
+import useFilters from '@/hooks/useFilters';
 
 export default defineComponent({
   props: ['photo'],
   setup() {
-    const store = useStore();
-    const isLike = ref(false);
-    const likeIcon = ref(likeIconDisactive);
+    const {
+      toggleLike, isLike, likeIcon, addToFilter,
+    } = useFilters();
 
     watch(isLike, (value) => {
       if (value) {
@@ -37,22 +40,10 @@ export default defineComponent({
       }
     });
 
-    const toggleLike = (photo) => {
-      let favouritesPhotos = JSON.parse(localStorage.getItem('favourites')) || [];
-      if (favouritesPhotos && favouritesPhotos.find((item) => item.photo === photo.photo)) {
-        favouritesPhotos = favouritesPhotos.filter((item) => item.photo !== photo.photo);
-        store.commit('setFavourites', favouritesPhotos);
-        isLike.value = false;
-      } else {
-        favouritesPhotos.push(photo);
-        isLike.value = true;
-      }
-      localStorage.setItem('favourites', JSON.stringify(favouritesPhotos));
-    };
-
     return {
       likeIcon,
       toggleLike,
+      addToFilter,
     };
   },
 });

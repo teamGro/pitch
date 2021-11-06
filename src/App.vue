@@ -6,6 +6,7 @@
 import { defineComponent, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
+import fixedNumbers from '@/helpers/constants';
 
 export default defineComponent({
   setup() {
@@ -17,7 +18,7 @@ export default defineComponent({
     watch(
       () => route.query,
       () => {
-        if (route.query.breed && route.query.breed !== store.state.filterBreeds.join('&')) {
+        if (route.query.breed) {
           const breeds = route.query.breed.split('&');
           breeds.forEach((item, i) => {
             if (i === 0) {
@@ -29,7 +30,7 @@ export default defineComponent({
           });
         } else if (!route.query.breed && !store.state.photos.length) {
           store.commit('clearPhotosBreeds');
-          store.dispatch('getPhotos', 13);
+          store.dispatch('getPhotos', fixedNumbers.firstPhotosQty);
         }
       },
     );
