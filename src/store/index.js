@@ -48,7 +48,7 @@ export default createStore({
       return state.photos.slice(1);
     },
     getFavouritesPhoto(state) {
-      return state.photos.filter((photo) => photo.isLike === true);
+      return (state.favourites) ? state.favourites.filter((photo) => photo.isLike === true) : [];
     },
   },
   mutations: {
@@ -89,10 +89,16 @@ export default createStore({
       state.photos = [];
     },
     setFavourites(state, favourites) {
-      state.photos = favourites;
+      state.favourites = favourites;
     },
     updateFavouritesPhoto(state, photo) {
-      state.photos.find((item) => item.photo === photo.photo).isLike = photo.isLike;
+      if (state.photos.find((item) => item.photo === photo.photo)) {
+        state.photos.find((item) => item.photo === photo.photo).isLike = photo.isLike;
+      }
+
+      if (state.favourites?.length && state.favourites.find((item) => item.photo === photo.photo)) {
+        state.favourites.find((item) => item.photo === photo.photo).isLike = photo.isLike;
+      }
     },
   },
   actions: {

@@ -25,7 +25,7 @@ export default defineComponent({
     const store = useStore();
 
     const favourites = JSON.parse(localStorage.getItem('favourites'));
-    if (favourites && favourites.length && !store.state.photos.length) {
+    if (favourites && favourites.length) {
       store.commit('setFavourites', favourites);
     }
 

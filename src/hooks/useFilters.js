@@ -11,10 +11,15 @@ export default function () {
   const router = useRouter();
 
   const addToFilter = (breed) => {
-    if (route.query.breed && route.query.breed.indexOf(breed) === -1) {
-      router.replace({ name: 'Main', query: { breed: `${route.query.breed}&${breed}` } });
+    let resultBreed = breed;
+    if (breed.indexOf('-') !== -1) {
+      resultBreed = breed.slice(0, breed.indexOf('-'));
+      console.log(resultBreed, breed);
+    }
+    if (route.query.breed && route.query.breed.indexOf(resultBreed) === -1) {
+      router.replace({ name: 'Main', query: { breed: `${route.query.breed}&${resultBreed}` } });
     } else if (!route.query.breed) {
-      router.replace({ name: 'Main', query: { breed } });
+      router.replace({ name: 'Main', query: { breed: resultBreed } });
     }
   };
 

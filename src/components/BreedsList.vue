@@ -21,7 +21,7 @@
           class="breeds__item"
           v-for="item in breed"
           :key="item"
-          @click="addToFilterList(item)"
+          @click="addToFilter(item)"
         >{{ item }}</span>
       </li>
     </ul>
@@ -32,23 +32,16 @@
 <script>
 import { defineComponent, computed } from 'vue';
 import { useStore } from 'vuex';
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import fixedNumbers from '@/helpers/constants';
+import useFilters from '@/hooks/useFilters';
 
 export default defineComponent({
   props: ['isOpen'],
   setup() {
+    const { addToFilter } = useFilters();
     const store = useStore();
     const router = useRouter();
-    const route = useRoute();
-
-    const addToFilterList = (breed) => {
-      if (route.query.breed && route.query.breed.indexOf(breed) === -1) {
-        router.replace({ name: 'Main', query: { breed: `${route.query.breed}&${breed}` } });
-      } else if (!route.query.breed) {
-        router.replace({ name: 'Main', query: { breed } });
-      }
-    };
 
     const getAllDogs = () => {
       router.replace({ name: 'Main', query: '' });
@@ -58,7 +51,7 @@ export default defineComponent({
 
     return {
       breeds: computed(() => store.getters.getBreedsTitle),
-      addToFilterList,
+      addToFilter,
       getAllDogs,
       activeFilters: computed(() => store.state.filterBreeds),
     };
