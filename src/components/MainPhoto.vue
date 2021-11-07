@@ -10,9 +10,9 @@
     >
     <button class="photos__like-btn photos__like-btn_main btn">
       <img
-        :src="likeIcon"
+        :src="photo.isLike ? likeIconActive : likeIconDisactive"
         alt=""
-        @click="toggleLike(photo)"
+        @click.stop="toggleLike(photo)"
       >
     </button>
     <span class="photos__title photos__title_main">{{ photo.breed }}</span>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { defineComponent, watch } from 'vue';
+import { defineComponent } from 'vue';
 import likeIconDisactive from '../assets/like-icon-big.png';
 import likeIconActive from '../assets/like-icon-active.png';
 import useFilters from '@/hooks/useFilters';
@@ -28,20 +28,11 @@ import useFilters from '@/hooks/useFilters';
 export default defineComponent({
   props: ['photo'],
   setup() {
-    const {
-      toggleLike, isLike, likeIcon, addToFilter,
-    } = useFilters();
-
-    watch(isLike, (value) => {
-      if (value) {
-        likeIcon.value = likeIconActive;
-      } else {
-        likeIcon.value = likeIconDisactive;
-      }
-    });
+    const { toggleLike, addToFilter } = useFilters();
 
     return {
-      likeIcon,
+      likeIconDisactive,
+      likeIconActive,
       toggleLike,
       addToFilter,
     };

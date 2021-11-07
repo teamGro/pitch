@@ -6,10 +6,10 @@
   >
   <button
     class="photos__like-btn btn"
-    @click="toggleLike(photo)"
+    @click.stop="toggleLike(photo)"
   >
     <img
-      :src="likeIcon"
+      :src="photo.isLike ? likeIconActive : likeIconDisactive"
       alt=""
     >
   </button>
@@ -17,8 +17,7 @@
 </template>
 
 <script>
-import { defineComponent, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { defineComponent } from 'vue';
 import likeIconDisactive from '../assets/like-icon-big.png';
 import likeIconActive from '../assets/like-icon-active.png';
 import useFilters from '@/hooks/useFilters';
@@ -26,23 +25,11 @@ import useFilters from '@/hooks/useFilters';
 export default defineComponent({
   props: ['photo'],
   setup() {
-    const { toggleLike, isLike, likeIcon } = useFilters();
-    const route = useRoute();
-
-    if (route.name === 'Favourites') {
-      likeIcon.value = likeIconActive;
-    }
-
-    watch(isLike, (value) => {
-      if (value) {
-        likeIcon.value = likeIconActive;
-      } else {
-        likeIcon.value = likeIconDisactive;
-      }
-    });
+    const { toggleLike } = useFilters();
 
     return {
-      likeIcon,
+      likeIconDisactive,
+      likeIconActive,
       toggleLike,
     };
   },

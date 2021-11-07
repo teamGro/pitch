@@ -25,12 +25,12 @@ export default defineComponent({
     const store = useStore();
 
     const favourites = JSON.parse(localStorage.getItem('favourites'));
-    if (favourites && favourites.length) {
+    if (favourites && favourites.length && !store.state.photos.length) {
       store.commit('setFavourites', favourites);
     }
 
     return {
-      favourites: computed(() => store.state.favourites),
+      favourites: computed(() => store.getters.getFavouritesPhoto),
     };
   },
 });

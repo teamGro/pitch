@@ -7,6 +7,7 @@ function normalizeBreedPhotos(response) {
   return response.data.message.map((item) => ({
     photo: item,
     breed: item.split('/')[breedNameInURL],
+    isLike: false,
   }));
 }
 
@@ -45,6 +46,9 @@ export default createStore({
     },
     getPhotos(state) {
       return state.photos.slice(1);
+    },
+    getFavouritesPhoto(state) {
+      return state.photos.filter((photo) => photo.isLike === true);
     },
   },
   mutations: {
@@ -85,13 +89,20 @@ export default createStore({
       state.photos = [];
     },
     setFavourites(state, favourites) {
-      state.favourites = favourites;
+      state.photos = favourites;
+    },
+    updateFavouritesPhoto(state, photo) {
+      state.photos.find((item) => item.photo === photo.photo).isLike = photo.isLike;
     },
   },
   actions: {
     async getAllBreeds({ commit }) {
-      const response = await axios.get('https://dog.ceo/api/breeds/list/all');
-      commit('setBreeds', response.data.message);
+      try {
+        const response = await axios.get('https://dog.ceo/api/breeds/list/all');
+        commit('setBreeds', response.data.message);
+      } catch (err) {
+        alert('При загрузке данных произошда ошибка, попробуйте ещё раз');
+      }
     },
     async getPhotos({ commit }, repeatQuantity) {
       try {
@@ -100,7 +111,7 @@ export default createStore({
 
         commit('setPhotosBreeds', photos);
       } catch (err) {
-        console.error(err);
+        alert('При загрузке данных произошда ошибка, попробуйте ещё раз');
       }
     },
     async getBreed({ commit }, { breed, quantity, isUpdate }) {
@@ -110,7 +121,7 @@ export default createStore({
 
         commit('updatePhotosBreeds', { photos, isUpdate });
       } catch (err) {
-        console.error(err);
+        alert('Фото такой породы не найдены!');
       }
     },
   },

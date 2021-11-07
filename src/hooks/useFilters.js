@@ -22,12 +22,10 @@ export default function () {
     let favouritesPhotos = JSON.parse(localStorage.getItem('favourites')) || [];
     if (favouritesPhotos && favouritesPhotos.find((item) => item.photo === photo.photo)) {
       favouritesPhotos = favouritesPhotos.filter((item) => item.photo !== photo.photo);
-      store.commit('setFavourites', favouritesPhotos);
-      isLike.value = false;
     } else {
       favouritesPhotos.push(photo);
-      isLike.value = true;
     }
+    store.commit('updateFavouritesPhoto', { ...photo, isLike: !photo.isLike });
     localStorage.setItem('favourites', JSON.stringify(favouritesPhotos));
   };
 
