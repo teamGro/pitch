@@ -22,9 +22,9 @@ export default defineComponent({
           const breeds = route.query.breed.split('&');
           breeds.forEach((item, i) => {
             if (i === 0) {
-              store.dispatch('getBreed', { breed: item, quantity: 13, isUpdate: false });
+              store.dispatch('getBreed', { breed: item, quantity: fixedNumbers.firstPhotosQty, isUpdate: false });
             } else {
-              store.dispatch('getBreed', { breed: item, quantity: 12, isUpdate: true });
+              store.dispatch('getBreed', { breed: item, quantity: fixedNumbers.restPhotosQty, isUpdate: true });
             }
             store.commit('addBreedToFilter', item);
           });
